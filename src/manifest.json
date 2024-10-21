@@ -13,7 +13,7 @@
         "<all_urls>"
       ],
       "css": [
-        "./tailwindcss-output.css"
+        "./input.css"
       ],
       "js": [
         "./index.tsx"

@@ -4,12 +4,9 @@
   "license": "MIT",
   "browserslist": "> 0.5%, last 2 versions, not dead",
   "scripts": {
-    "prestart": "yarn style",
     "start": "parcel watch ./src/manifest.json --host localhost --config @parcel/config-webextension --dist-dir ./dist --no-content-hash",
-    "prebuild": "yarn style && rm -rf ./dist",
-    "build": "parcel build ./src/manifest.json --config @parcel/config-webextension --dist-dir ./dist --no-content-hash",
-    "style": "npx tailwindcss -i ./src/input.css -o ./src/tailwindcss-output.css",
-    "style:watch": "yarn style -- --watch"
+    "prebuild": "rm -rf ./dist",
+    "build": "parcel build ./src/manifest.json --config @parcel/config-webextension --dist-dir ./dist --no-content-hash"
   },
   "dependencies": {
     "classnames": "^2.3.1",
