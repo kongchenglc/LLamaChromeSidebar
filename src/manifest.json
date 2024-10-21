@@ -1,0 +1,29 @@
+{
+  "short_name": "llm-chrome-extension-sidebar",
+  "name": "LLM Sidebar Web Extension",
+  "version": "0.0.1",
+  "manifest_version": 3,
+  "background": {
+    "service_worker": "./background.ts",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "css": [
+        "./tailwindcss-output.css"
+      ],
+      "js": [
+        "./index.tsx"
+      ]
+    }
+  ],
+  "permissions": [
+    "storage",
+    "scripting",
+    "tabs"
+  ],
+  "icons": {}
+}

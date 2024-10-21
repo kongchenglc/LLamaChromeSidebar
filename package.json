@@ -1,0 +1,32 @@
+{
+  "name": "llm-chrome-extension",
+  "version": "0.0.1",
+  "license": "MIT",
+  "browserslist": "> 0.5%, last 2 versions, not dead",
+  "scripts": {
+    "prestart": "yarn style",
+    "start": "parcel watch ./src/manifest.json --host localhost --config @parcel/config-webextension --dist-dir ./dist --no-content-hash",
+    "prebuild": "yarn style && rm -rf ./dist",
+    "build": "parcel build ./src/manifest.json --config @parcel/config-webextension --dist-dir ./dist --no-content-hash",
+    "style": "npx tailwindcss -i ./src/input.css -o ./src/tailwindcss-output.css",
+    "style:watch": "yarn style -- --watch"
+  },
+  "dependencies": {
+    "classnames": "^2.3.1",
+    "react": "^18.2.0",
+    "react-app-polyfill": "^3.0.0",
+    "react-dom": "^18.2.0",
+    "react-frame-component": "^5.2.3"
+  },
+  "devDependencies": {
+    "@parcel/config-webextension": "^2.12.0",
+    "@types/react": "^18.0.19",
+    "@types/react-dom": "^18.0.6",
+    "parcel": "latest",
+    "postcss": "^8.4.16",
+    "postcss-nested": "^5.0.6",
+    "process": "^0.11.10",
+    "tailwindcss": "^3.1.8",
+    "typescript": "^4.8.3"
+  }
+}
