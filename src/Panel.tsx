@@ -27,12 +27,12 @@ export default function Panel({ onWidthChange, initialEnabled }: { onWidthChange
         width: sidePanelWidth,
         boxShadow: '0px 0px 5px #0000009e',
       }}
-      className="absolute top-0 right-0 left-auto bottom-0 z-50 bg-[#F5F8FA] ease-in-out duration-300"
+      className="absolute top-0 right-0 left-auto bottom-0 z-[99999] bg-[#F5F8FA] ease-in-out duration-300"
     >
-      <div className="absolute top-0 right-0 left-auto bottom-0 w-full h-screen z-50 flex justify-center items-center p-0 overflow-hidden bg-[#F5F8FA]">
+      <div className="absolute top-0 right-0 left-auto bottom-0 w-full h-screen z-[99999] flex justify-center items-center p-0 overflow-hidden bg-[#F5F8FA]">
         <ChatBox></ChatBox>
       </div>
-      <div className="absolute bottom-0 left-0 w-[30px] z-50 flex justify-center items-center p-1">
+      <div className="absolute bottom-0 left-0 w-[30px] z-[99999] flex justify-center items-center p-1">
         <Button active={enabled} onClick={() => openPanel()}>
           <span>
             <svg
