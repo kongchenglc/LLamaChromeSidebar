@@ -23,7 +23,9 @@
   "permissions": [
     "storage",
     "scripting",
-    "tabs"
+    "tabs",
+    "https://*/*",
+    "http://*/*"
   ],
   "icons": {}
 }

@@ -1,4 +1,5 @@
 #side-bar-extension-root {
+  color: black;
   @tailwind base;
   @tailwind components;
   @tailwind utilities;

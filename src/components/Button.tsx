@@ -17,7 +17,8 @@ export default function Button({ children, active, onClick, label, className }: 
         {
           'bg-gray-600 text-white': active,
           'bg-gray-100 text-black': !active,
-          "left-[-40px]": !active
+          "left-[-30px]": !active,
+          "left-2": active
         },
         className
       )}

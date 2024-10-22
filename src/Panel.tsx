@@ -1,8 +1,7 @@
 import React, { ReactElement, useEffect, useState } from 'react';
 import { APP_COLLAPSE_WIDTH, APP_EXTEND_WIDTH, } from './const';
-import classNames from 'classnames';
 import Button from './components/Button';
-import ChatMessage from './components/ChatMessage';
+import ChatBox from './components/ChatBox'
 
 export default function Panel({ onWidthChange, initialEnabled }: { onWidthChange: (value: number) => void, initialEnabled: boolean }): ReactElement {
   const [enabled, setEnabled] = useState(initialEnabled);
@@ -28,10 +27,12 @@ export default function Panel({ onWidthChange, initialEnabled }: { onWidthChange
         width: sidePanelWidth,
         boxShadow: '0px 0px 5px #0000009e',
       }}
-      className="absolute top-0 right-0 bottom-0 z-max bg-[#F5F8FA] ease-in-out duration-300"
+      className="absolute top-0 right-0 left-auto bottom-0 z-50 bg-[#F5F8FA] ease-in-out duration-300"
     >
-      <div className="absolute bottom-0 left-0 w-[50px] z-10 flex justify-center items-center p-1 padding-bottom-20">
-        {/* <ChatMessage></ChatMessage> */}
+      <div className="absolute top-0 right-0 left-auto bottom-0 w-full h-screen z-50 flex justify-center items-center p-0 overflow-hidden bg-[#F5F8FA]">
+        <ChatBox></ChatBox>
+      </div>
+      <div className="absolute bottom-0 left-0 w-[30px] z-50 flex justify-center items-center p-1">
         <Button active={enabled} onClick={() => openPanel()}>
           <span>
             <svg
@@ -40,7 +41,7 @@ export default function Panel({ onWidthChange, initialEnabled }: { onWidthChange
               viewBox="0 0 24 24"
               strokeWidth={1.5}
               stroke="currentColor"
-              className="w-6 h-6"
+              className="w-3 h-3"
             >
               <path
                 strokeLinecap="round"

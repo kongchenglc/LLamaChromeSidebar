@@ -8,12 +8,12 @@ import ReactMarkdown from "react-markdown";
 import { ReactMarkdownProps } from "react-markdown/lib/complex-types";
 import remarkGfm from "remark-gfm";
 
-interface ChatMessage {
+export interface IChatMessage {
   role: "user" | "assistant";
   content: string;
 }
 interface Props {
-  message: ChatMessage;
+  message: IChatMessage;
 }
 
 // This lets us style any markdown tables that are rendered
