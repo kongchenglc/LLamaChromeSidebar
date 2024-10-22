@@ -13,8 +13,12 @@ export default function Button({ children, active, onClick, label, className }: 
   return (
     <button
       className={classNames(
-        'px-2 rounded py-1 ease-linear hover:bg-gray-600 hover:text-white',
-        { 'bg-gray-600 text-white': active, 'text-gray-800': !active },
+        'absolute bottom-1 px-2 rounded py-1 ease-linear hover:bg-gray-600 hover:text-white duration-300',
+        {
+          'bg-gray-600 text-white': active,
+          'bg-gray-100 text-black': !active,
+          "left-[-40px]": !active
+        },
         className
       )}
       onClick={onClick}
