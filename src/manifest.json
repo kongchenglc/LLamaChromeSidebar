@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "manifest_version": 3,
   "background": {
-    "service_worker": "./background.ts",
+    "service_worker": "background.ts",
     "type": "module"
   },
   "content_scripts": [
@@ -13,10 +13,10 @@
         "<all_urls>"
       ],
       "css": [
-        "./input.css"
+        "input.css"
       ],
       "js": [
-        "./index.tsx"
+        "index.tsx"
       ]
     }
   ],
@@ -24,8 +24,14 @@
     "storage",
     "scripting",
     "tabs",
+    "activeTab"
+  ],
+  "host_permissions": [
     "https://*/*",
     "http://*/*"
   ],
-  "icons": {}
+  "icons": {
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
 }
