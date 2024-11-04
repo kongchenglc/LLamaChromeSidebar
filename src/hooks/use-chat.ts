@@ -6,24 +6,6 @@ interface ChatMessage {
   content: string;
 }
 
-function streamAsyncIterator(stream: ReadableStream) {
-  const reader = stream.getReader();
-  return {
-    next() {
-      return reader.read();
-    },
-    return() {
-      reader.releaseLock();
-      return {
-        value: {},
-      };
-    },
-    [Symbol.asyncIterator]() {
-      return this;
-    },
-  };
-}
-
 /**
  * A custom hook to handle the chat state and logic
  */
@@ -32,12 +14,8 @@ export function useChat() {
   const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
   const [state, setState] = useState<"idle" | "waiting" | "loading">("idle");
 
-  // Lets us cancel the stream
   const abortController = useMemo(() => new AbortController(), []);
 
-  /**
-   * Cancels the current chat and adds the current chat to the history
-   */
   function cancel() {
     setState("idle");
     abortController.abort();
@@ -52,10 +30,6 @@ export function useChat() {
     }
   }
 
-  /**
-   * Clears the chat history
-   */
-
   function clear() {
     console.log("clear");
     setChatHistory([]);
@@ -68,10 +42,7 @@ export function useChat() {
   /**
    * Sends a new message to the AI function and streams the response
    */
-  const sendMessage = async (
-    message: string,
-    chatHistory: Array<ChatMessage>,
-  ) => {
+  const sendMessage = async (message: string, chatHistory: Array<ChatMessage>) => {
     setState("waiting");
     const pageContent = getPageContent();
     let chatContent = "";
@@ -81,11 +52,6 @@ export function useChat() {
     ];
 
     setChatHistory(newHistory);
-    const body = JSON.stringify({
-      messages: newHistory.slice(-8),
-    });
-
-    const decoder = new TextDecoder();
 
     const res = await fetch(API_PATH, {
       method: 'POST',
@@ -93,33 +59,40 @@ export function useChat() {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ pageContent, message }),
-    })
+      signal: abortController.signal,
+    });
 
     setCurrentChat("...");
 
-    if (!res.ok || !res.body) {
+    if (!res.ok) {
+      console.error("HTTP error:", res.status, res.statusText);
       setState("idle");
       return;
     }
 
-    for await (const event of streamAsyncIterator(res.body)) {
+    const decoder = new TextDecoder();
+    const stream = res.body;
+
+    if (stream) {
+      const reader = stream.getReader();
+      let done = false;
+
       setState("loading");
-      const data = decoder.decode(event).split("\n")
-      chatContent = data[0]
-      setCurrentChat(data[0])
-      // for (const chunk of data) {
-      //   if(!chunk) continue;
-      //   const message = JSON.parse(chunk);
-      //   if (message?.role === "assistant") {
-      //     chatContent = "";
-      //     continue;
-      //   }
-      //   const content = message?.choices?.[0]?.delta?.content
-      //   if (content) {
-      //     chatContent += content;
-      //     setCurrentChat(chatContent);
-      //   }
-      // }
+
+      // Read chunks from the stream
+      while (!done) {
+        const { done: isDone, value } = await reader.read();
+        done = isDone;
+
+        if (value) {
+          const chunk = decoder.decode(value, { stream: true });
+          chatContent += chunk;
+          setCurrentChat(chatContent); // Update currentChat with the chunk
+          console.log("Received chunk:", chunk);
+        }
+      }
+    } else {
+      console.error("Stream is empty or not available.");
     }
 
     setChatHistory((curr) => [
