@@ -61,6 +61,10 @@ export function useChat() {
     setChatHistory([]);
   }
 
+  function getPageContent() {
+    return document.body.innerText.trim();
+  }
+
   /**
    * Sends a new message to the AI function and streams the response
    */
@@ -69,6 +73,7 @@ export function useChat() {
     chatHistory: Array<ChatMessage>,
   ) => {
     setState("waiting");
+    const pageContent = getPageContent();
     let chatContent = "";
     const newHistory = [
       ...chatHistory,
@@ -77,26 +82,19 @@ export function useChat() {
 
     setChatHistory(newHistory);
     const body = JSON.stringify({
-      // Only send the most recent messages. This is also
-      // done in the serverless function, but we do it here
-      // to avoid sending too much data
       messages: newHistory.slice(-8),
     });
 
     const decoder = new TextDecoder();
 
-    // const res = await fetch(API_PATH, {
-    //   body,
-    //   method: "GET",
-    //   signal: abortController.signal,
-    // })
-    const res = await fetch(`${API_PATH}?message=${message}`, {
-      method: 'GET',
+    const res = await fetch(API_PATH, {
+      method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
-      }
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ pageContent, message }),
     })
-    
+
     setCurrentChat("...");
 
     if (!res.ok || !res.body) {
@@ -107,7 +105,7 @@ export function useChat() {
     for await (const event of streamAsyncIterator(res.body)) {
       setState("loading");
       const data = decoder.decode(event).split("\n")
-      chatContent=data[0]
+      chatContent = data[0]
       setCurrentChat(data[0])
       // for (const chunk of data) {
       //   if(!chunk) continue;
