@@ -1,6 +1,8 @@
 import { useMemo, useState } from "react";
 
 const API_PATH = "http://localhost/chat/";
+// const API_PATH = "http://3.142.76.164:9527/chat/"; // not available because of https website
+
 interface ChatMessage {
   role: "user" | "assistant";
   content: string;
