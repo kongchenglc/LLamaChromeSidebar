@@ -31,6 +31,7 @@ async function init() {
 
   // Create div wrapper
   const body = document.body;
+  body.style.position = 'fixed';
   const bodyWrapper = document.createElement('div');
   bodyWrapper.id = 'original-body-wrapper';
   bodyWrapper.className = 'h-full w-full overflow-auto relative ease-in-out duration-300';
