@@ -1,4 +1,7 @@
 import { useMemo, useState } from "react";
+import getPageContent from "../util/getContentText";
+import extractImages from "../util/getContentImages";
+import detectMainContentType from '../util/detectContent';
 
 const API_PATH = "http://localhost:9527/chat/";
 // const API_PATH = "http://3.142.76.164:9527/chat/"; // not available because of https website
@@ -37,27 +40,14 @@ export function useChat() {
     setChatHistory([]);
   }
 
-  function getPageContent() {
-    // 获取页面中所有的文本内容
-    const bodyText = document.body.innerText;
-
-    // 使用选择器排除插件内容
-    const pluginElement = document.getElementById('side-bar-extension-root');
-    if (pluginElement) {
-      // 从页面文本中移除插件内容
-      const pluginText = pluginElement.innerText;
-      return bodyText.replace(pluginText, '').trim();
-    }
-
-    return bodyText.trim();
-  }
-
   /**
    * Sends a new message to the AI function and streams the response
    */
   const sendMessage = async (message: string, chatHistory: Array<ChatMessage>) => {
     setState("waiting");
+    const contentMainType = detectMainContentType();
     const pageContent = getPageContent();
+    const imageUrls = extractImages();
     let chatContent = "";
     const newHistory = [
       ...chatHistory,
@@ -71,7 +61,11 @@ export function useChat() {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ pageContent, message }),
+      body: JSON.stringify({
+        contentMainType,
+        pageContent, message,
+        images: imageUrls
+      }),
       signal: abortController.signal,
     });
 
