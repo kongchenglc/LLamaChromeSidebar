@@ -26,8 +26,6 @@ async function init() {
   // Create html tag wrapper
   const htmlWrapper = document.querySelectorAll('html')[0];
   htmlWrapper.id = 'original-html-wrapper';
-  htmlWrapper.style['margin-right'] = `${initialEnabled ? APP_EXTEND_WIDTH : APP_COLLAPSE_WIDTH}px`;
-  htmlWrapper.className = 'ease-in-out duration-300';
 
   // Create div wrapper
   const body = document.body;
@@ -43,6 +41,7 @@ async function init() {
 
   bodyWrapper.style.overflow = 'auto';
   bodyWrapper.style.height = '100vh';
+  bodyWrapper.style.width = '100vw';
 
   // Append the wrapper to the body
   body.style.overflow = 'hidden';
